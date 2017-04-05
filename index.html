@@ -1,34 +1,66 @@
 <!DOCTYPE html>
 <html>
-</head>
-	<script>
-	var x=50;
-	var y=50;
-	function draw(){
-		var c = document.getElementById("myCanvas");
-		var ctx = c.getContext("2d");
-		ctx.clearRect(0,0,200,100);
-		ctx.beginPath();
-		ctx.arc(x,y,40,0,2*Math.PI);
-		ctx.stroke();
-		}
-	function move()
-	{
-	x++;
-	y++;
-	draw();
-	}
-		
-		
-	</script> 
-</head>
-<body onkeydown="move()">
+	<head>
+		<script>
+			var x = 50;
+			var y = 50;
 
-<canvas id="myCanvas"  width="200" height="100" style="border:1px solid #d3d3d3;">
-Your browser does not support the HTML5 canvas tag.</canvas>
+			function draw()
+			{
+				var c = document.getElementById("myCanvas");
+				var ctx = c.getContext("2d");
+				ctx.clearRect(0,0,200,100);
+				
+				ctx.beginPath();
+				ctx.arc(x,y,20,0,2*Math.PI);
+				ctx.stroke();
 
+				ctx.beginPath();
+				ctx.arc(x,y,5,0,2*Math.PI);
+				ctx.stroke();
+				
+				ctx.beginPath();
+				ctx.arc(x+50,y,20,0,2*Math.PI);
+				ctx.stroke();
 
+				ctx.beginPath();
+				ctx.arc(x+50,y,5,0,2*Math.PI);
+				ctx.stroke();
+			}
 
-</body>
+			function move(event)
+			{
+				var klawisz = event.which || event.keyCode;
+				//console.log(klawisz);
+				// lewo - 37
+				// gora - 38
+				// prawo - 39
+				// dol - 40
+				if (klawisz == 37)
+					x--;
+				else if (klawisz == 38)
+					y--;
+				else if (klawisz == 39)
+					x++;
+				else if (klawisz == 40)
+					y++;
+
+				console.log("x: "+x+" y: "+y);
+					
+				draw();
+			}
+
+			function start()
+			{
+				draw();
+			}
+		</script> 
+	</head>
+	<body onload="start()" onkeydown="move(event)">
+		<canvas id="myCanvas"  width="200" height="100" style="border:1px solid #d3d3d3;">
+			Your browser does not support the HTML5 canvas tag.
+			Twoja przegladarka nie obsluguje canvasu!
+		</canvas>
+	</body>
 </html>
 
