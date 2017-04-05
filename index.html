@@ -2,14 +2,41 @@
 <html>
 	<head>
 		<script>
+			(
+				function()
+				{
+					var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+					window.requestAnimationFrame = requestAnimationFrame;
+				}
+			)();
+			
+			class Strzala
+			{
+				constructor(_x, _y, _r)
+				{
+					this.x = _x;
+					this.y = _y;
+					this.r = _r;
+				}
+				
+				draw(ctx)
+				{
+					ctx.beginPath();
+					ctx.arc(this.x,this.y,this.r,0,2*Math.PI);
+					ctx.stroke();
+				}
+			}
+
 			var x = 50;
 			var y = 50;
+			
+			var strzaly = [];
 
 			function draw()
 			{
 				var c = document.getElementById("myCanvas");
 				var ctx = c.getContext("2d");
-				ctx.clearRect(0,0,200,100);
+				ctx.clearRect(0,0,800,500);
 				
 				ctx.beginPath();
 				ctx.arc(x,y,20,0,2*Math.PI);
@@ -18,46 +45,63 @@
 				ctx.beginPath();
 				ctx.arc(x,y,5,0,2*Math.PI);
 				ctx.stroke();
-				
-				ctx.beginPath();
-				ctx.arc(x+50,y,20,0,2*Math.PI);
-				ctx.stroke();
 
-				ctx.beginPath();
-				ctx.arc(x+50,y,5,0,2*Math.PI);
-				ctx.stroke();
+				for (var i = 0; i < strzaly.length; i++)
+				{
+					strzaly[i].x += 2;
+					strzaly[i].draw(ctx);
+				}
 			}
 
 			function move(event)
 			{
 				var klawisz = event.which || event.keyCode;
-				//console.log(klawisz);
+				
+				console.log(klawisz);
 				// lewo - 37
 				// gora - 38
 				// prawo - 39
 				// dol - 40
+				
+				if (klawisz == 32)
+				{
+					var strzala = new Strzala(x, y, 4);
+					strzaly.push(strzala);
+					return;
+				}
+				
+				var speed = 3;
+				
 				if (klawisz == 37)
-					x--;
+					x -= speed;
 				else if (klawisz == 38)
-					y--;
+					y -= speed;
 				else if (klawisz == 39)
-					x++;
+					x += speed;
 				else if (klawisz == 40)
-					y++;
+					y += speed;
 
-				console.log("x: "+x+" y: "+y);
-					
+				if (y < 21)
+					y = 21;
+				if (x < 21)
+					x = 21;
+			}
+			
+			function update()
+			{
 				draw();
+				
+				requestAnimationFrame(update);
 			}
 
 			function start()
 			{
-				draw();
+				update();
 			}
 		</script> 
 	</head>
 	<body onload="start()" onkeydown="move(event)">
-		<canvas id="myCanvas"  width="200" height="100" style="border:1px solid #d3d3d3;">
+		<canvas id="myCanvas"  width="800" height="500" style="border:1px solid #d3d3d3;">
 			Your browser does not support the HTML5 canvas tag.
 			Twoja przegladarka nie obsluguje canvasu!
 		</canvas>
